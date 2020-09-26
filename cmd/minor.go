@@ -5,11 +5,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var majorCmd = &cobra.Command{
-	Use:                    "major",
+var minorCmd = &cobra.Command{
+	Use:                    "minor",
 	Aliases:                nil,
 	SuggestFor:             nil,
-	Short:                  "Increase major version",
+	Short:                  "Increase minor version",
 	Long:                   "",
 	Example:                "",
 	ValidArgs:              nil,
@@ -26,7 +26,7 @@ var majorCmd = &cobra.Command{
 	PreRun:                 nil,
 	PreRunE:                nil,
 	Run: func(cmd *cobra.Command, args []string) {
-		Incr(semver.VerPartMajor, "")
+		Incr(semver.VerPartMinor, "")
 	},
 	RunE:                       nil,
 	PostRun:                    nil,
