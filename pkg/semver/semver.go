@@ -1,4 +1,4 @@
-package cmd
+package semver
 
 import (
 	"errors"
@@ -11,30 +11,6 @@ type SemVer struct {
 	Major int
 	Minor int
 	Patch int
-}
-
-func NewPatch() SemVer {
-	return SemVer{
-		Major: 0,
-		Minor: 0,
-		Patch: 1,
-	}
-}
-
-func NewMinor() SemVer {
-	return SemVer{
-		Major: 0,
-		Minor: 1,
-		Patch: 0,
-	}
-}
-
-func NewMajor() SemVer {
-	return SemVer{
-		Major: 1,
-		Minor: 0,
-		Patch: 0,
-	}
 }
 
 // Parse parses a string into to SemVer
@@ -116,7 +92,7 @@ func (s SemVer) SmallThan(other SemVer) bool {
 	return s.Compare(other) < 0
 }
 
-func (s SemVer) IncMajor() SemVer {
+func (s SemVer) IncrMajor() SemVer {
 	s.Major++
 	s.Minor = 0
 	s.Patch = 0
@@ -124,14 +100,14 @@ func (s SemVer) IncMajor() SemVer {
 	return s
 }
 
-func (s SemVer) IncMinor() SemVer {
+func (s SemVer) IncrMinor() SemVer {
 	s.Minor++
 	s.Patch = 0
 
 	return s
 }
 
-func (s SemVer) IncPatch() SemVer {
+func (s SemVer) IncrPatch() SemVer {
 	s.Patch++
 
 	return s
