@@ -1,27 +1,30 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
-	"os"
 )
 
-var rootCmd = &cobra.Command{
-	Use:        "bump",
-	Aliases:    nil,
-	SuggestFor: nil,
-	Short:      "Bump makes git tagging easier",
-	Long:       "",
-	Example:    "",
-}
-
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+var (
+	tagMessage string
+	rootCmd    = &cobra.Command{
+		Use:        "bump major | minor | patch <-m message>",
+		Aliases:    nil,
+		SuggestFor: nil,
+		Short:      "Bump semantic version of a git repository",
+		Long:       "",
+		Example:    "",
 	}
+)
+
+func Execute() error {
+	return rootCmd.Execute()
 }
 
 func init() {
-	rootCmd.AddCommand(cmdMajor)
+	majorCmd.Flags().StringVarP(&tagMessage, "message", "m", "", "Message for git annotated tag")
+	minorCmd.Flags().StringVarP(&tagMessage, "message", "m", "", "Message for git annotated tag")
+	patchCmd.Flags().StringVarP(&tagMessage, "message", "m", "", "Message for git annotated tag")
+	rootCmd.AddCommand(majorCmd)
+	rootCmd.AddCommand(minorCmd)
+	rootCmd.AddCommand(patchCmd)
 }
