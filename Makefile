@@ -6,12 +6,13 @@ commit := `git log --max-count=1 --pretty=format:%aI_%h`
 src_dir := .
 build_dir := build
 
-ldflags := -ldflags "-w -s -X main.version=$(version) -X main.build=$(build_time) -X main.commit=$(commit)"
+ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(version)"
 
 executable := $(build_dir)/$(APP)
 
 .PHONY: build
 build :
+	@echo Building $(version)
 	go build -o $(executable) $(ldflags) -v $(src_dir)
 
 .PHONY: run

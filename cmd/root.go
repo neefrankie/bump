@@ -6,6 +6,7 @@ import (
 
 var (
 	tagMessage string
+	Version    string
 	rootCmd    = &cobra.Command{
 		Use:        "bump major | minor | patch <-m message>",
 		Aliases:    nil,
@@ -13,6 +14,7 @@ var (
 		Short:      "Bump semantic version of a git repository",
 		Long:       "",
 		Example:    "",
+		Version:    Version,
 	}
 )
 
