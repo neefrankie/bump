@@ -1,7 +1,12 @@
 package main
 
-import "github.com/neefrankie/bump/cmd"
+import (
+	"fmt"
+	"github.com/neefrankie/bump/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	if err := cmd.Execute(); err != nil {
+		fmt.Println(err)
+	}
 }
