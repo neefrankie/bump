@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
+	"github.com/neefrankie/bump/pkg/semver"
 	"os/exec"
 	"strings"
 )
@@ -15,7 +15,7 @@ func GetLatestTag() (string, error) {
 	}
 	tagStr := strings.TrimSpace(string(b))
 	if tagStr == "" {
-		return "", errors.New("no version tag set for current repo")
+		return "", nil
 	}
 
 	tags := strings.Split(tagStr, "\n")
@@ -32,7 +32,20 @@ func GetLatestTag() (string, error) {
 	return latest, nil
 }
 
-func AddTag(v SemVer, m string) (string, error) {
+func LatestVersion() (semver.SemVer, error) {
+	vStr, err := GetLatestTag()
+	if err != nil {
+		return semver.SemVer{}, err
+	}
+
+	if vStr == "" {
+		return semver.SemVer{}, nil
+	}
+
+	return semver.Parse(vStr)
+}
+
+func AddTag(v semver.SemVer, m string) error {
 	args := make([]string, 0)
 
 	if m != "" {
@@ -42,10 +55,32 @@ func AddTag(v SemVer, m string) (string, error) {
 		args = []string{"tag", v.String()}
 	}
 
-	b, err := exec.Command("git", args...).Output()
+	return exec.Command("git", args...).Run()
+}
+
+func Incr(p semver.VerPart, m string) {
+	sv, err := LatestVersion()
 	if err != nil {
-		return "", err
+		fmt.Printf("Error finding latest version tag: %v\n", err)
+		return
 	}
 
-	return string(b), nil
+	fmt.Printf("Current version %s\n", sv)
+
+	switch p {
+	case semver.VerPartMajor:
+		sv = sv.IncrMajor()
+	case semver.VerPartMinor:
+		sv = sv.IncrMinor()
+	case semver.VerPartPatch:
+		sv = sv.IncrPatch()
+	}
+
+	if err := AddTag(sv, m); err != nil {
+		fmt.Printf("Error adding tag: %v\n", err)
+		return
+	}
+
+	fmt.Printf("New version set to %s\n", sv)
+	return
 }
