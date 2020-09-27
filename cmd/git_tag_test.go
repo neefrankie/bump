@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/neefrankie/bump/pkg/semver"
 	"testing"
 )
 
@@ -14,12 +15,35 @@ func TestGetLatestTag(t *testing.T) {
 	t.Logf(vStr)
 }
 
-func TestAddTag(t *testing.T) {
-	s, err := AddTag(NewPatch(), "Bump version %s")
-	if err != nil {
-		t.Error(err)
-		return
+func TestIncr(t *testing.T) {
+	type args struct {
+		p      semver.VerPart
+		m      string
+		dryRun bool
 	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "Dry run",
+			args: args{
+				p:      semver.VerPartMajor,
+				m:      "",
+				dryRun: true,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Incr(tt.args.p, tt.args.m, tt.args.dryRun)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Incr() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 
-	t.Log(s)
+			t.Logf("%s", got)
+		})
+	}
 }

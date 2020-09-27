@@ -79,15 +79,16 @@ func Incr(p semver.VerPart, m string, dryRun bool) (semver.SemVer, error) {
 
 	if dryRun {
 		fmt.Printf("Version will be upgraded %s -> %s\n", current, newVer)
-	} else {
-		err := AddTag(current, m)
-		if err != nil {
-			fmt.Printf("Error adding tag: %v\n", err)
-			return semver.SemVer{}, err
-		} else {
-			fmt.Printf("Version upgraded %s -> %s\n", current, newVer)
-		}
+		return newVer, nil
 	}
+
+	err = AddTag(newVer, m)
+	if err != nil {
+		fmt.Printf("Error adding tag: %v\n", err)
+		return semver.SemVer{}, err
+	}
+
+	fmt.Printf("Version upgraded %s -> %s\n", current, newVer)
 
 	return newVer, nil
 }
