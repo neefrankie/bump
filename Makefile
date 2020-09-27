@@ -47,7 +47,7 @@ endif
 
 .PHONY: publish-patch
 publish-patch :
-ifeq ($(strip $(is_git_clean)),)
+ifeq ($(is_git_clean),)
 #	$(run_generate) -patch
 #	git add . && git commit -m "Patch"
 #	$(executable) patch
