@@ -59,6 +59,7 @@ func IsClean() (bool, error) {
 }
 
 func Commit(file string, m string) error {
+	log.Printf("Committing %s - %s", file, m)
 	err := exec.Command("git", "add", file).Run()
 	if err != nil {
 		return err
