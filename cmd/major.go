@@ -25,10 +25,11 @@ var majorCmd = &cobra.Command{
 	PersistentPreRunE:      nil,
 	PreRun:                 nil,
 	PreRunE:                nil,
-	Run: func(cmd *cobra.Command, args []string) {
-		_, _ = Incr(semver.VerPartMajor, tagMessage, false)
+	Run:                    nil,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		_, err := Incr(semver.VerPartMajor, tagMessage, false)
+		return err
 	},
-	RunE:                       nil,
 	PostRun:                    nil,
 	PostRunE:                   nil,
 	PersistentPostRun:          nil,

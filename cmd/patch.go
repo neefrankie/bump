@@ -25,10 +25,11 @@ var patchCmd = &cobra.Command{
 	PersistentPreRunE:      nil,
 	PreRun:                 nil,
 	PreRunE:                nil,
-	Run: func(cmd *cobra.Command, args []string) {
-		_, _ = Incr(semver.VerPartPatch, tagMessage, false)
+	Run:                    nil,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		_, err := Incr(semver.VerPartPatch, tagMessage, false)
+		return err
 	},
-	RunE:                       nil,
 	PostRun:                    nil,
 	PostRunE:                   nil,
 	PersistentPostRun:          nil,
