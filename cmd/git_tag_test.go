@@ -47,3 +47,12 @@ func TestIncr(t *testing.T) {
 		})
 	}
 }
+
+func TestIsClean(t *testing.T) {
+	ok, err := IsClean()
+	if err != nil {
+		t.Error(err)
+	}
+
+	t.Logf("%t", ok)
+}
