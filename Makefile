@@ -31,14 +31,14 @@ publish-major : build
 	git push && git push --tags
 
 .PHONY: publish-minor
-publish-minor :
+publish-minor : build
 	$(run_generate) -minor
 	git add . && git commit -m "Minor version"
 	$(executable) minor
 	git push && git push --tags
 
 .PHONY: publish-patch
-publish-patch :
+publish-patch : build
 	$(run_generate) -patch
 	git add . && git commit -m "Patch"
 	$(executable) patch
