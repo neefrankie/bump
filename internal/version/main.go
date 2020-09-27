@@ -10,9 +10,10 @@ import (
 )
 
 var (
-	major bool
-	minor bool
-	patch bool
+	major   bool
+	minor   bool
+	patch   bool
+	message string
 )
 
 var tmpl = `package %s
@@ -24,19 +25,23 @@ func main() {
 	flag.BoolVar(&major, "major", false, "Increase major version")
 	flag.BoolVar(&minor, "minor", false, "Increase minor version")
 	flag.BoolVar(&patch, "patch", false, "Increase patch version")
+	flag.StringVar(&message, "message", "", "Message for annotated tag")
 
 	flag.Parse()
 
-	var sv semver.SemVer
-	var err error
+	var part semver.VerPart
 	switch {
 	case major:
-		sv, err = cmd.Incr(semver.VerPartMajor, "", true)
+		part = semver.VerPartMajor
 	case minor:
-		sv, err = cmd.Incr(semver.VerPartMinor, "", true)
+		part = semver.VerPartMinor
 	case patch:
-		sv, err = cmd.Incr(semver.VerPartPatch, "", true)
+		part = semver.VerPartPatch
+	default:
+		log.Fatal("one the flags -major, -minor or -patch is required")
 	}
+
+	sv, err := cmd.Incr(part, "", true)
 
 	if err != nil {
 		log.Fatal(err)
@@ -51,8 +56,19 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile("build/version.txt", []byte(sv.String()), 0644)
+	ok, err := cmd.IsClean()
 	if err != nil {
 		log.Fatal(err)
+	}
+	if !ok {
+		err := cmd.Commit("cmd/version.go", fmt.Sprintf("Bump version %s", sv.String()))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	_, err = cmd.Incr(part, message, false)
+	if err != nil {
+		log.Fatal()
 	}
 }
