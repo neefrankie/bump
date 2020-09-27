@@ -6,7 +6,6 @@ import (
 
 var (
 	tagMessage string
-	Version    string
 	rootCmd    = &cobra.Command{
 		Use:        "bump major | minor | patch <-m message>",
 		Aliases:    nil,
