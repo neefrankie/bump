@@ -48,7 +48,7 @@ version-patch :
 .PHONY: publish-patch
 publish-patch : version-patch build
 	git add . && git commit -m "Bump version `cat build/version.txt`"
-#	$(executable) patch
+	$(executable) patch
 #	git push && git push --tags
 
 .PHONY: clean
