@@ -26,7 +26,7 @@ var minorCmd = &cobra.Command{
 	PreRun:                 nil,
 	PreRunE:                nil,
 	Run: func(cmd *cobra.Command, args []string) {
-		Incr(semver.VerPartMinor, "")
+		_, _ = Incr(semver.VerPartMinor, tagMessage, false)
 	},
 	RunE:                       nil,
 	PostRun:                    nil,

@@ -58,29 +58,36 @@ func AddTag(v semver.SemVer, m string) error {
 	return exec.Command("git", args...).Run()
 }
 
-func Incr(p semver.VerPart, m string) {
-	sv, err := LatestVersion()
+func Incr(p semver.VerPart, m string, dryRun bool) (semver.SemVer, error) {
+	current, err := LatestVersion()
 	if err != nil {
 		fmt.Printf("Error finding latest version tag: %v\n", err)
-		return
+		return semver.SemVer{}, err
 	}
 
-	fmt.Printf("Current version %s\n", sv)
-
+	var newVer semver.SemVer
 	switch p {
 	case semver.VerPartMajor:
-		sv = sv.IncrMajor()
+		newVer = current.IncrMajor()
 	case semver.VerPartMinor:
-		sv = sv.IncrMinor()
+		newVer = current.IncrMinor()
 	case semver.VerPartPatch:
-		sv = sv.IncrPatch()
+		newVer = current.IncrPatch()
+	default:
+		newVer = current
 	}
 
-	if err := AddTag(sv, m); err != nil {
-		fmt.Printf("Error adding tag: %v\n", err)
-		return
+	if dryRun {
+		fmt.Printf("Version will be upgraded %s -> %s\n", current, newVer)
+	} else {
+		err := AddTag(current, m)
+		if err != nil {
+			fmt.Printf("Error adding tag: %v\n", err)
+			return semver.SemVer{}, err
+		} else {
+			fmt.Printf("Version upgraded %s -> %s\n", current, newVer)
+		}
 	}
 
-	fmt.Printf("New version set to %s\n", sv)
-	return
+	return newVer, nil
 }

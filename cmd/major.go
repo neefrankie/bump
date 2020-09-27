@@ -26,7 +26,7 @@ var majorCmd = &cobra.Command{
 	PreRun:                 nil,
 	PreRunE:                nil,
 	Run: func(cmd *cobra.Command, args []string) {
-		Incr(semver.VerPartMajor, "")
+		_, _ = Incr(semver.VerPartMajor, tagMessage, false)
 	},
 	RunE:                       nil,
 	PostRun:                    nil,

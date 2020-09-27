@@ -26,7 +26,7 @@ var patchCmd = &cobra.Command{
 	PreRun:                 nil,
 	PreRunE:                nil,
 	Run: func(cmd *cobra.Command, args []string) {
-		Incr(semver.VerPartPatch, "")
+		_, _ = Incr(semver.VerPartPatch, tagMessage, false)
 	},
 	RunE:                       nil,
 	PostRun:                    nil,
