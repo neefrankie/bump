@@ -10,7 +10,7 @@ ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(git_tag)"
 
 executable := $(build_dir)/$(APP)
 
-run_generate := go run internal/version/generate.go
+run_generate := go run internal/version/main.go
 
 .PHONY: build
 build :
@@ -22,34 +22,16 @@ run :
 	./$(executable)
 
 .PHONE:
-version-major :
+major :
 	$(run_generate) -major
 
-.PHONY: publish-major
-publish-major : version-major build
-	git add . && git commit -m "Bump version `cat build/version.txt`"
-	$(executable) major
-	git push && git push --tags
-
-.PHONY: version-minor
-version-minor :
+.PHONY: minor
+minor :
 	$(run_generate) -minor
 
-.PHONY: publish-minor
-publish-minor : version-minor build
-	git add . && git commit -m "Bump version `cat build/version.txt`"
-	$(executable) minor
-	git push && git push --tags
-
-.PHONY: version-patch
-version-patch :
+.PHONY: patch
+patch :
 	$(run_generate) -patch
-
-.PHONY: publish-patch
-publish-patch : version-patch build
-	git add . && git commit -m "Bump version `cat build/version.txt`"
-	$(executable) patch
-	git push && git push --tags
 
 .PHONY: clean
 clean :
