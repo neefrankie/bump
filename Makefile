@@ -25,7 +25,7 @@ run :
 
 .PHONY: publish-major
 publish-major : build
-ifeq ($(strip $(is_git_clean)),)
+ifeq ($(strip $(is_git_clean)), "")
 	$(run_generate) -major
 	git add . && git commit -m "Major version"
 	$(executable) major
