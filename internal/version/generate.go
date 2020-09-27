@@ -50,9 +50,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	err = ioutil.WriteFile("version.mk", []byte(fmt.Sprintf("version := %s", sv.String())), 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
