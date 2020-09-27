@@ -30,7 +30,7 @@ version-major :
 
 .PHONY: publish-major
 publish-major : version-major build
-	git add . && git commit -m "Bump version"
+#	git add . && git commit -m "Bump version"
 	$(executable) major
 	git push && git push --tags
 
@@ -40,7 +40,7 @@ version-minor :
 
 .PHONY: publish-minor
 publish-minor : version-minor build
-	git add . && git commit -m "Bump version"
+#	git add . && git commit -m "Bump version"
 	$(executable) minor
 	git push && git push --tags
 
@@ -50,7 +50,7 @@ version-patch :
 
 .PHONY: publish-patch
 publish-patch : version-patch build
-	git add . && git commit -m "Bump version"
+#	git add . && git commit -m "Bump version"
 	$(executable) patch
 	git push && git push --tags
 
