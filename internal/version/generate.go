@@ -50,4 +50,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = ioutil.WriteFile("build/version.txt", []byte(sv.String()), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
