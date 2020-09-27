@@ -5,7 +5,7 @@ Bump is a CLI semantic versioning tool similar to `npm version`. It reads the la
 ## Install
 
 ```
-go install github.com/neefrankie/bump
+go get github.com/neefrankie/bump
 ```
 
 ## Usage
