@@ -16,7 +16,9 @@ var (
 	message string
 )
 
-var tmpl = `package %s
+var tmpl = `// Code generated .* DO NOT EDIT.
+
+package %s
 
 var Version = "%s"
 `
