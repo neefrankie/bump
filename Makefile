@@ -48,10 +48,11 @@ endif
 .PHONY: publish-patch
 publish-patch :
 ifeq ($(strip $(is_git_clean)),)
-	$(run_generate) -patch
-	git add . && git commit -m "Patch"
-	$(executable) patch
-	git push && git push --tags
+#	$(run_generate) -patch
+#	git add . && git commit -m "Patch"
+#	$(executable) patch
+#	git push && git push --tags
+	@echo Clean
 else
 	@echo WARNING: Repository is not clean. Please commit untracked files.
 endif
