@@ -8,7 +8,7 @@ build_dir := build
 
 ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(version)"
 
-is_git_clean = `git status --porcelain=v1 2>/dev/null`
+is_git_clean = `git diff --stat`
 
 executable := $(build_dir)/$(APP)
 
