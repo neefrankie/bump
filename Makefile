@@ -1,7 +1,7 @@
 APP := bump
 
 
-git_tag := git tag -l --sort=-v:refname | head -n 1
+git_tag := `git tag -l --sort=-v:refname | head -n 1`
 build_time := `date +%FT%T%z`
 commit := `git log --max-count=1 --pretty=format:%aI_%h`
 src_dir := .
@@ -49,12 +49,12 @@ version-patch :
 	$(run_generate) -patch
 
 .PHONY: publish-patch
-publish-patch : version-patch build
+publish-patch : version-patch
 	include version.mk
 	@echo $(version)
-	git add . && git commit -m "Bump version $(version)"
-	$(executable) patch
-	git push && git push --tags
+#	git add . && git commit -m "Bump version $(version)"
+#	$(executable) patch
+#	git push && git push --tags
 
 .PHONY: clean
 clean :
