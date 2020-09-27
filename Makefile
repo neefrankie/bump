@@ -1,12 +1,13 @@
 APP := bump
 
-version := `git tag -l --sort=-v:refname | head -n 1`
+
+git_tag := git tag -l --sort=-v:refname | head -n 1
 build_time := `date +%FT%T%z`
 commit := `git log --max-count=1 --pretty=format:%aI_%h`
 src_dir := .
 build_dir := build
 
-ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(version)"
+ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(git_tag)"
 
 is_git_clean = `git diff --stat`
 
@@ -16,31 +17,42 @@ run_generate := go run internal/version/generate.go
 
 .PHONY: build
 build :
-	@echo Building $(version)
+	@echo Building $(git_tag)
 	go build -o $(executable) $(ldflags) -v $(src_dir)
 
 .PHONY: run
 run :
 	./$(executable)
 
-.PHONY: publish-major
-publish-major : build
+.PHONE:
+version-major :
 	$(run_generate) -major
-	git add . && git commit -m "Major version"
+
+.PHONY: publish-major
+publish-major : version-major build
+	git add . && git commit -m "Bump version $(version)"
 	$(executable) major
 	git push && git push --tags
 
-.PHONY: publish-minor
-publish-minor : build
+.PHONY: version-minor
+version-minor :
 	$(run_generate) -minor
-	git add . && git commit -m "Minor version"
+
+.PHONY: publish-minor
+publish-minor : version-minor build
+	git add . && git commit -m "Bump version $(version)"
 	$(executable) minor
 	git push && git push --tags
 
-.PHONY: publish-patch
-publish-patch : build
+.PHONY: version-patch
+version-patch :
 	$(run_generate) -patch
-	git add . && git commit -m "Patch"
+
+.PHONY: publish-patch
+publish-patch : version-patch build
+	include version.mk
+	@echo $(version)
+	git add . && git commit -m "Bump version $(version)"
 	$(executable) patch
 	git push && git push --tags
 
