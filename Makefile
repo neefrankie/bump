@@ -8,7 +8,11 @@ build_dir := build
 
 ldflags := -ldflags "-w -s -X github.com/neefrankie/bump/cmd.Version=$(version)"
 
+is_git_clean = `git status --porcelain=v1 2>/dev/null`
+
 executable := $(build_dir)/$(APP)
+
+run_generate := go run internal/version/generate.go
 
 .PHONY: build
 build :
@@ -18,6 +22,39 @@ build :
 .PHONY: run
 run :
 	./$(executable)
+
+.PHONY: publish-major
+publish-major : build
+ifeq ($(strip $(is_git_clean)),)
+	$(run_generate) -major
+	git add . && git commit -m "Major version"
+	$(executable) major
+	git push && git push --tags
+else
+	@echo WARNING: Repository is not clean. Please commit untracked files.
+endif
+
+.PHONY: publish-minor
+publish-minor :
+ifeq ($(strip $(is_git_clean)),)
+	$(run_generate) -minor
+	git add . && git commit -m "Minor version"
+	$(executable) minor
+	git push && git push --tags
+else
+	@echo WARNING: Repository is not clean. Please commit untracked files.
+endif
+
+.PHONY: publish-patch
+publish-patch :
+ifeq ($(strip $(is_git_clean)),)
+	$(run_generate) -patch
+	git add . && git commit -m "Patch"
+	$(executable) patch
+	git push && git push --tags
+else
+	@echo WARNING: Repository is not clean. Please commit untracked files.
+endif
 
 .PHONY: clean
 clean :
